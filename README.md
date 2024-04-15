@@ -1,4 +1,4 @@
-# DL_fromABCtoXYZ
+#DL_fromABCtoXYZ
 
 ## 从零搭建神经网络完成简单的图像识别
 
@@ -23,3 +23,11 @@
 
 + 深度学习入门：基于python的理论与实现
 + python神经网络编程
+
+### 4. 需要的链接
++ MNIST数据集[🔗](http://yann.lecun.com/exdb/mnist/)
++ FashionMNIST数据集[🔗](https://github.com/zalandoresearch/fashion-mnist)
++ Eigen库[🔗](https://eigen.tuxfamily.org/index.php?title=Main_Page)
++ Xtensor库[🔗](https://xtensor.readthedocs.io/en/latest/)
++ OpenBlas[🔗](https://github.com/OpenMathLib/OpenBLAS?tab=readme-ov-file)
++ MKL库[🔗](https://www.intel.cn/content/www/cn/zh/developer/articles/guide/intel-math-kernel-library-intel-mkl-2019-getting-started.html)
