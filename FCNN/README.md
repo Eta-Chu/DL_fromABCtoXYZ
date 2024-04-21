@@ -49,3 +49,8 @@
 |求所有数的和|M.sum()||
 
 
+# 编译方式
+mkdir build && cmake .. && make
+
+# 执行测试程序
+cd build && ./test_main
