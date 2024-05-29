@@ -1,16 +1,22 @@
 cmake_minimum_required(VERSION 3.1)
 project(fcnn)
+set(CMAKE_CXX_STANDARD 14)
+
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/eigen/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+file(GLOB fcnn_src src/*.cc)
+add_library(nn SHARED ${fcnn_src})
 
-file(GLOB fcnn_src src/fcnn.cc)
-add_library(${PROJECT_NAME} SHARED ${fcnn_src})
+#add_subdirectory(${CMAKE_CRRENT_SOURCE_DIR}/3rd/googletest)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd/googletest)
+file(GLOB test_src "test/*.cpp")
+add_executable(test ${test_src} ${fcnn_src})
+#target_link_libraries(test_main PUBLIC gtest gtest_main)
 
-
-file(GLOB_RECURSE test_src "test/*.cc")
-add_executable(test_main ${test_src})
-target_link_libraries(test_main PUBLIC gtest gtest_main)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/build)
+file(GLOB MAIN_SRC main/main.cc)
+add_executable(main ${MAIN_SRC})
+target_link_libraries(main PUBLIC nn)

@@ -40,3 +40,7 @@ TEST(testCase, test_matrix_sub)
     // 检查结果是否与预期一致
     ASSERT_EQ(result, expected_result);
 }
+TEST(case1, test_random_matrix_generation)
+{
+    
+}
