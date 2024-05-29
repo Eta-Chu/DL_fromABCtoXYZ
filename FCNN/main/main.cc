@@ -1,5 +1,6 @@
 #include <iostream>
 #include "fcnn.h"
+#include "tools.h"
 
 using namespace std;
 
@@ -12,6 +13,16 @@ int main()
     FCNN::NeuralNetwork nn(input_size, hidden_size, output_size);
     std::cout << nn.input_size << std::endl;
 
-    Eigen::MatrixXd dateset = Eigen::MatrixXd::Random(100, 10);
-    Eigen::MatrixXi target = Eigen::MatrixXi::Random(100, 4);
+    Eigen::MatrixXd train_x= Eigen::MatrixXd::Random(100, 10);
+    Eigen::ArrayXd y = (Eigen::ArrayXd::Random(100) + 1) * 5;
+    Eigen::ArrayXi y1 = y.cast<int>();
+    Eigen::VectorXi train_y = y1.matrix();
+    
+    Eigen::MatrixXd target = one_hot(train_y);
+    
+    cout << target << endl;
+
+    cout << nn.accuracy(train_x, target) << endl;
+
+    return 0;
 };

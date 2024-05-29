@@ -43,3 +43,14 @@ Eigen::VectorXi row_argmax(Eigen::MatrixXd& y)
 
     return row_max;
 }
+
+Eigen::MatrixXd one_hot(Eigen::VectorXi& y)
+{
+    Eigen::MatrixXd res = Eigen::MatrixXd::Zero(y.rows(), 10);
+
+    for (int i = 0; i < y.rows(); i++){
+        res(i, y(i)) = 1;
+    }
+
+    return res;
+}
