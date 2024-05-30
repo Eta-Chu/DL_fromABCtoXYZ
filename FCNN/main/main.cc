@@ -20,9 +20,11 @@ int main()
     
     Eigen::MatrixXd target = one_hot(train_y);
     
-    cout << target << endl;
+    cout << train_y(2) << endl;
+    cout << target.row(2) << endl;
 
     cout << nn.accuracy(train_x, target) << endl;
+    
 
     return 0;
 };
