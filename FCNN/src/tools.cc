@@ -54,3 +54,8 @@ Eigen::MatrixXd one_hot(Eigen::VectorXi& y)
 
     return res;
 }
+
+void normalization(Eigen::MatrixXd& x)
+{
+    x = x.array() / 255;
+}

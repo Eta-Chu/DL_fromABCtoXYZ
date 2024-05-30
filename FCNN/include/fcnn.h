@@ -19,7 +19,6 @@ public:
     double weight_init_std;
     
     map<string, Eigen::MatrixXd> weight;
-    map<string, Eigen::VectorXd> threshold;
 
     NeuralNetwork();
 
@@ -32,6 +31,14 @@ public:
     double loss(Eigen::MatrixXd& input_x, Eigen::MatrixXd& target);
 
     double accuracy(Eigen::MatrixXd& input_x, Eigen::MatrixXd& target);
+
+    template <typename Derived>
+    Eigen::MatrixXd cal_gradient(Eigen::MatrixBase<Derived>& param,
+        Eigen::MatrixXd x, 
+        Eigen::MatrixXd t,
+        float h = 1e-4);
+
+    void backward(Eigen::MatrixXd& x_batch, Eigen::MatrixXd& t_batch);
 };
 
 }  // namespace FCNN
