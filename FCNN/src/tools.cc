@@ -1,4 +1,6 @@
 #include <Eigen/Dense>
+#include <random>
+#include <utility>
 
 Eigen::MatrixXd sigmoid(Eigen::MatrixXd x)
 {
@@ -58,4 +60,42 @@ Eigen::MatrixXd one_hot(Eigen::VectorXi& y)
 void normalization(Eigen::MatrixXd& x)
 {
     x = x.array() / 255;
+}
+
+std::pair<Eigen::MatrixXd, Eigen::MatrixXd> random_choice(
+        Eigen::MatrixXd& x,
+        Eigen::MatrixXd& y,
+        int pieces)
+{
+    int k = x.cols();
+    int j = x.rows();
+    Eigen::MatrixXd x_batch(pieces, k);
+    Eigen::MatrixXd y_batch(pieces, 10);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dis(0, j-1);
+    
+    for (int i = 0; i < pieces; i++){
+        int index = dis(gen);
+        x_batch.row(i) = x.row(index);
+        y_batch.row(i) = y.row(index);
+    }
+    
+    return std::make_pair(x_batch, y_batch);
+}
+
+Eigen::MatrixXd normal_matrix(int m, int n)
+{
+    Eigen::MatrixXd random_matrix(m, n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::normal_distribution<double> dis(0.0, 1.0);
+
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
+            random_matrix(i, j) = dis(gen);
+        }
+    }
+
+    return random_matrix;
 }

@@ -34,11 +34,13 @@ public:
 
     template <typename Derived>
     Eigen::MatrixXd cal_gradient(Eigen::MatrixBase<Derived>& param,
-        Eigen::MatrixXd x, 
-        Eigen::MatrixXd t,
-        float h = 1e-4);
+                                 Eigen::MatrixXd x, 
+                                 Eigen::MatrixXd t,
+                                 float h = 1e-4);
 
-    void backward(Eigen::MatrixXd& x_batch, Eigen::MatrixXd& t_batch);
+    void backward(Eigen::MatrixXd& x_batch, 
+                  Eigen::MatrixXd& t_batch, 
+                  double learning_rate);
 };
 
 }  // namespace FCNN

@@ -1,11 +1,7 @@
 #include "fcnn.h"
 #include <Eigen/Dense>
-#include <algorithm>
-#include <cstring>
-#include <locale>
 #include <map>
 #include <string>
-#include <system_error>
 #include <type_traits>
 #include "tools.h"
 
@@ -26,8 +22,8 @@ NeuralNetwork::NeuralNetwork(int s_input, int s_hidden, int s_output)
     output_size = s_output;
 
     weight.insert({"w1", Eigen::MatrixXd::Random(input_size, hidden_size)});
-    weight.insert({"w2", Eigen::MatrixXd::Random(hidden_size, output_size)});
     weight.insert({"b1", Eigen::MatrixXd::Zero(hidden_size, 1)});
+    weight.insert({"w2", Eigen::MatrixXd::Random(hidden_size, output_size)});
     weight.insert({"b2", Eigen::MatrixXd::Zero(output_size, 1)});
 }
 
@@ -115,10 +111,10 @@ void NeuralNetwork::backward(Eigen::MatrixXd& x_batch,
         Eigen::MatrixXd& t_batch,
         double learning_rate)
 {
-    for ()
-    Eigen::MatrixXd grad = this->cal_gradient(x_batch, t_batch);
-    
-
+    for (auto m : this->weight){
+        Eigen::MatrixXd grad = this->cal_gradient(m.second, x_batch, t_batch);
+        m.second = m.second - grad * learning_rate;
+    }
 }
 
 } // namespace FCNN
