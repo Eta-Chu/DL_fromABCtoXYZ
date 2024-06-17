@@ -1,7 +1,10 @@
 #include "fcnn.h"
 #include <Eigen/Dense>
+#include <algorithm>
 #include <map>
 #include <string>
+#include <vector>
+#include <chrono>
 #include <type_traits>
 #include "tools.h"
 
@@ -35,10 +38,10 @@ NeuralNetwork::~NeuralNetwork()
 Eigen::MatrixXd NeuralNetwork::predict(Eigen::MatrixXd& input_x)
 {
     Eigen::MatrixXd a1 = (input_x * weight["w1"]).rowwise() 
-        + weight["b1"].transpose();
+        + weight["b1"].col(0).transpose();
     Eigen::MatrixXd z1 = sigmoid(a1);
     Eigen::MatrixXd a2 = (z1 * weight["w2"]).rowwise()
-        + weight["b2"].transpose();
+        + weight["b2"].col(0).transpose();
     Eigen::MatrixXd y = softmax(a2);
 
     return y;
@@ -47,7 +50,7 @@ Eigen::MatrixXd NeuralNetwork::predict(Eigen::MatrixXd& input_x)
 double NeuralNetwork::loss(Eigen::MatrixXd& input_x, Eigen::MatrixXd& target)
 {
     Eigen::MatrixXd y = predict(input_x);
-    double loss_value = cross_entropy(input_x, target);
+    double loss_value = cross_entropy(y, target);
     return loss_value;
 }
 
@@ -58,24 +61,27 @@ double NeuralNetwork::accuracy(Eigen::MatrixXd& input_x,
     Eigen::VectorXi y_max_index = row_argmax(y);
     Eigen::VectorXi t_max_index = row_argmax(target);
     Eigen::Array<bool, Eigen::Dynamic, 1> comp_yt = (y_max_index.array() == t_max_index.array());
+    double right_num = comp_yt.cast<int>().sum();
+    int counts = y.rows();
+    double acc = right_num / counts;
     
-    double acc = comp_yt.cast<int>().sum() / y.rows();
     return acc;
 }
 
-template <typename Derived>
-Eigen::MatrixXd NeuralNetwork::cal_gradient(
-        Eigen::MatrixBase<Derived>& param,
+template <typename MatrixType>
+MatrixType NeuralNetwork::cal_gradient(
+        Eigen::MatrixBase<MatrixType>& param,
         Eigen::MatrixXd x, 
         Eigen::MatrixXd t,
         float h)
 {
     int i_row = param.rows();
     int i_col = param.cols();
-    Eigen::MatrixXd grad = Eigen::MatrixXd::Zero(i_row, i_col);
+    MatrixType grad = MatrixType::Zero(i_row, i_col);
 
     if (i_col == 1){
-        for (int i = 0; i < i_col; i++){
+        for (int i = 0; i < i_row; i++){
+//            std::cout << i << std::endl;
             double f1, f2;
             double val = param(i);
             param(i) = val + h;
@@ -90,6 +96,7 @@ Eigen::MatrixXd NeuralNetwork::cal_gradient(
     } else {
         for (int i = 0; i < i_row; i++){
             for (int j = 0; j < i_col; j++){
+//                std::cout << i << "," << j << std::endl;
                 double f1, f2;
                 double val = param(i, j);
                 param(i, j) = val + h;
@@ -111,9 +118,15 @@ void NeuralNetwork::backward(Eigen::MatrixXd& x_batch,
         Eigen::MatrixXd& t_batch,
         double learning_rate)
 {
-    for (auto m : this->weight){
-        Eigen::MatrixXd grad = this->cal_gradient(m.second, x_batch, t_batch);
-        m.second = m.second - grad * learning_rate;
+    std::vector<std::string> key_order = {"w1", "b1", "w2", "b2"};
+    for (auto key : key_order){
+//        auto start_time = std::chrono::steady_clock::now();
+//        std::cout << key << std::endl;
+        auto grad = this->cal_gradient(this->weight[key], x_batch, t_batch);
+        this->weight[key] -= grad * learning_rate;
+//        auto end_time = std::chrono::steady_clock::now();
+//        auto duration = std::chrono::duration<double>(end_time - start_time).count();
+//        std::cout << duration << std::endl;
     }
 }
 

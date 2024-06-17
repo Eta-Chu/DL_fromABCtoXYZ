@@ -4,7 +4,6 @@
 #include <string>
 #include <Eigen/Dense>
 
-using namespace std;
 
 namespace FCNN {
 
@@ -18,7 +17,7 @@ public:
     int output_size;
     double weight_init_std;
     
-    map<string, Eigen::MatrixXd> weight;
+    std::map<std::string, Eigen::MatrixXd> weight;
 
     NeuralNetwork();
 
@@ -32,8 +31,8 @@ public:
 
     double accuracy(Eigen::MatrixXd& input_x, Eigen::MatrixXd& target);
 
-    template <typename Derived>
-    Eigen::MatrixXd cal_gradient(Eigen::MatrixBase<Derived>& param,
+    template <typename MatrixType>
+    MatrixType cal_gradient(Eigen::MatrixBase<MatrixType>& param,
                                  Eigen::MatrixXd x, 
                                  Eigen::MatrixXd t,
                                  float h = 1e-4);

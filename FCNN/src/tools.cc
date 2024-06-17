@@ -4,8 +4,8 @@
 
 Eigen::MatrixXd sigmoid(Eigen::MatrixXd x)
 {
-    Eigen::ArrayXXd y = 1 / (1 + (1 / x.array().exp()));
-    return y.matrix();
+    Eigen::MatrixXd y = 1 / (1 + ((-x.array()).exp()));
+    return y;
 }
 
 Eigen::MatrixXd softmax(Eigen::MatrixXd x)
@@ -59,7 +59,7 @@ Eigen::MatrixXd one_hot(Eigen::VectorXi& y)
 
 void normalization(Eigen::MatrixXd& x)
 {
-    x = x.array() / 255;
+    x = ((x.array() / 255) * 0.99) + 0.01;
 }
 
 std::pair<Eigen::MatrixXd, Eigen::MatrixXd> random_choice(

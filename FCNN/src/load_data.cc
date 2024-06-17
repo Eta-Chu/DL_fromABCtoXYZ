@@ -83,7 +83,7 @@ Eigen::MatrixXd LoadLabelInfoFromUbyte(std::string file_path, uint32_t& label_co
     std::vector<uint8_t> labels(count);
     file.read(reinterpret_cast<char*>(labels.data()), count);
 
-    Eigen::MatrixXd labels_matrix(count, 10);
+    Eigen::MatrixXd labels_matrix = Eigen::MatrixXd::Zero(count, 10);
 
     for(uint32_t i = 0; i < count; i++) {
         labels_matrix(i, labels[i]) = 1;
