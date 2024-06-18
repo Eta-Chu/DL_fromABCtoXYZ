@@ -7,7 +7,7 @@
 #include <chrono>
 #include <type_traits>
 #include "tools.h"
-
+#include <omp.h>
 
 using namespace std;
 
@@ -15,7 +15,7 @@ namespace FCNN {
 
 NeuralNetwork::NeuralNetwork()
 {
-
+    omp_set_dynamic(0); //自动调整
 }
 
 NeuralNetwork::NeuralNetwork(int s_input, int s_hidden, int s_output)
@@ -78,8 +78,9 @@ MatrixType NeuralNetwork::cal_gradient(
     int i_row = param.rows();
     int i_col = param.cols();
     MatrixType grad = MatrixType::Zero(i_row, i_col);
-
+    
     if (i_col == 1){
+        #pragma omp parallel for
         for (int i = 0; i < i_row; i++){
 //            std::cout << i << std::endl;
             double f1, f2;
@@ -94,7 +95,9 @@ MatrixType NeuralNetwork::cal_gradient(
             param(i) = val;
         }
     } else {
+        #pragma omp parallel for
         for (int i = 0; i < i_row; i++){
+            #pragma omp parallel for
             for (int j = 0; j < i_col; j++){
 //                std::cout << i << "," << j << std::endl;
                 double f1, f2;
@@ -118,6 +121,7 @@ void NeuralNetwork::backward(Eigen::MatrixXd& x_batch,
         Eigen::MatrixXd& t_batch,
         double learning_rate)
 {
+    std::cout << "Using " << Eigen::nbThreads() << " threads" << std::endl;
     std::vector<std::string> key_order = {"w1", "b1", "w2", "b2"};
     for (auto key : key_order){
 //        auto start_time = std::chrono::steady_clock::now();
