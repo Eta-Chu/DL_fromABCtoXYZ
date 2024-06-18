@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.1)
 project(fcnn)
 set(CMAKE_CXX_STANDARD 14)
 
+# 查找OpenMP库
+find_package(OpenMP REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/eigen/include)
@@ -22,3 +24,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/build)
 file(GLOB MAIN_SRC main/main.cc)
 add_executable(main ${MAIN_SRC})
 target_link_libraries(main PUBLIC nn)
+
+# 链接OpenMP库
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(main PUBLIC OpenMP::OpenMP_CXX)
+endif()
