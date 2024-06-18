@@ -1,4 +1,5 @@
 #include "load_data.h"
+#include "log_utils.h"
 
 #include <fstream>
 #include <vector>
@@ -33,10 +34,10 @@ Eigen::MatrixXd LoadImageInfoFromUbyte(std::string file_path, uint32_t& img_coun
     file.read((char*)&cols, sizeof(cols));
     cols = __builtin_bswap32(cols);
 
-    std::cout << "magic_number: " << magic_number << std::endl;
-    std::cout << "image_count: " << image_count << std::endl;
-    std::cout << "rows: " << rows << std::endl;
-    std::cout << "cols: " << cols << std::endl;
+    LOGI << "magic_number: " << magic_number;
+    LOGI << "image_count: " << image_count;
+    LOGI << "rows: " << rows;
+    LOGI << "cols: " << cols;
 
     uint32_t image_size = rows * cols;
     Eigen::MatrixXd images(image_count, image_size);
@@ -76,8 +77,8 @@ Eigen::MatrixXd LoadLabelInfoFromUbyte(std::string file_path, uint32_t& label_co
     file.read((char*)&count, sizeof(count));
     count = __builtin_bswap32(count);
 
-    std::cout << "magic_number: " << magic_number << std::endl;
-    std::cout << "label_count: " << count << std::endl;
+    LOGI << "magic_number: " << magic_number;
+    LOGI << "label_count: " << count;
 
     // 读取标签数据
     std::vector<uint8_t> labels(count);

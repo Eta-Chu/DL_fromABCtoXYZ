@@ -4,9 +4,11 @@
 #include "fcnn.h"
 #include "tools.h"
 #include "load_data.h"
+#include "log_utils.h"
 
 int main()
 {
+    InitGlog();
     int iters = 100;
     int batch_size = 100;
     double learning_rate = 0.1;
@@ -36,8 +38,8 @@ int main()
     std::vector<double> log_acc;
     
     for (int i = 0; i < iters; i++){
-        std::cout << "*******************" << std::endl;
-        std::cout << "this is " << i << " " << "iter" << std::endl;
+        LOGI << "*******************";
+        LOGI << "this is " << i << " " << "iter";
         Eigen::MatrixXd x_batch;
         Eigen::MatrixXd y_batch;
         std::tie(x_batch, y_batch) = random_choice(
@@ -55,18 +57,19 @@ int main()
         auto st = std::chrono::steady_clock::now();
         nn.backward(x_batch, y_batch, learning_rate);
         double loss = nn.loss(x_batch, y_batch);
-        std::cout << "loss:" << loss << std::endl;
+        LOGI << "loss:" << loss << std::endl;
         log_loss(i, 0) = loss;
     
         auto et = std::chrono::steady_clock::now();
         auto time = std::chrono::duration<double>(et-st).count();
-        std::cout << "time cost:" << time << std::endl;
+        LOGI << "time cost:" << time << std::endl;
         
         if (i % 10 == 0){
             double acc = nn.accuracy(x_test, y_test);
             log_acc.push_back(acc);
-            std::cout << "accuracy:" << acc << std::endl;
+            LOGW << "accuracy:" << acc << std::endl;
         }
     }
+    ShutdownGlog();
     return 0;
 };

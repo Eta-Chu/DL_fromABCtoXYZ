@@ -1,4 +1,7 @@
 #include "fcnn.h"
+#include "tools.h"
+#include "log_utils.h"
+
 #include <Eigen/Dense>
 #include <algorithm>
 #include <map>
@@ -6,7 +9,6 @@
 #include <vector>
 #include <chrono>
 #include <type_traits>
-#include "tools.h"
 #include <omp.h>
 
 using namespace std;
@@ -121,7 +123,7 @@ void NeuralNetwork::backward(Eigen::MatrixXd& x_batch,
         Eigen::MatrixXd& t_batch,
         double learning_rate)
 {
-    std::cout << "Using " << Eigen::nbThreads() << " threads" << std::endl;
+    LOGI << "Using " << Eigen::nbThreads() << " threads" << std::endl;
     std::vector<std::string> key_order = {"w1", "b1", "w2", "b2"};
     for (auto key : key_order){
 //        auto start_time = std::chrono::steady_clock::now();
