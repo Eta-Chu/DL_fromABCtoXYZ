@@ -18,6 +18,9 @@ target_link_libraries(nn PUBLIC OpenMP::OpenMP_CXX)
 #add_subdirectory(${CMAKE_CRRENT_SOURCE_DIR}/3rd/googletest)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd/glog)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/glog/src)
+include_directories(${CMAKE_BINARY_DIR}/3rd/glog)
+
 file(GLOB test_src "test/*.cpp")
 add_executable(test ${test_src} ${fcnn_src})
 target_link_libraries(test PUBLIC nn OpenMP::OpenMP_CXX glog)
