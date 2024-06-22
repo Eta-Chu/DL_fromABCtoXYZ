@@ -28,7 +28,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd/glog)
 
 file(GLOB fcnn_src src/*.cc)
 add_library(nn SHARED ${fcnn_src})
-target_link_libraries(nn PUBLIC OpenMP::OpenMP_CXX)
+target_link_libraries(nn PUBLIC glog OpenMP::OpenMP_CXX)
 
 #add_subdirectory(${CMAKE_CRRENT_SOURCE_DIR}/3rd/googletest)
 file(GLOB test_src "test/*.cpp")
